@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Balance from './components/Balance';
+import ExpenseForm from './components/ExpenseForm';
+import ExpenseList from './components/ExpenseList';
+import BudgetCalculator from './components/BudgetCalculator';
 
-function App() {
+const App = () => {
+  const [expenses, setExpenses] = useState([]);
+  const [balance, setBalance] = useState(0);
+
+  const addExpense = (expense) => {
+    setExpenses([...expenses, expense]);
+  };
+
+  useEffect(() => {
+    const totalExpenses = expenses.reduce((acc, curr) => acc + parseFloat(curr.amount), 0);
+    setBalance(1000 - totalExpenses); // Assumindo um orçamento inicial de 1000
+  }, [expenses]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Gerenciamento de Orçamento Pessoal</h1>
+      <Balance balance={balance} />
+      <ExpenseForm addExpense={addExpense} />
+      <ExpenseList expenses={expenses} />
+      <BudgetCalculator expenses={expenses} />
     </div>
   );
 }
